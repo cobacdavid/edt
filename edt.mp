@@ -4,7 +4,8 @@
 %%
 %% auteur : David Cobac <dcobac@free.fr>
 %% date : Janvier 2007
-%% version 0.6.1
+%% révision : Novembre 2025
+%% version 0.7
 
 % License
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
@@ -23,26 +24,11 @@
 %     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
 %% À voir :
-%%   - amélioration de l'affichage LaTeX
 %%   - génération de figures indiv. par classe
 %%   - plus de formes de rectangles
 
 input boxes;
 input string;
-
-vardef TEX primary s =
-  write "verbatimtex"   to "mptextmp.mp";
-  write "%&latex" to  "mptextmp.mp";
-  write "\documentclass{article}"  to "mptextmp.mp";
-  write "\usepackage[utf8]{inputenc}"  to "mptextmp.mp";
-  %%write "\usepackage{aeguill}" to "mptextmp.mp";
-  write "\usepackage[frenchb]{babel}" to "mptextmp.mp";
-  write "\begin{document}"  to "mptextmp.mp";
-  write "etex"    to "mptextmp.mp";
-  write "btex " & s & " etex" to "mptextmp.mp";
-  write EOF to "mptextmp.mp";
-  scantokens "input mptextmp"
-enddef;
 
 %%
 %%
@@ -107,7 +93,7 @@ vardef jours (text t) :=
 
   boxjoin(a.se=b.sw;a.ne=b.nw);
   forsuffixes $=t :
-	boxit.$( TEX ("\makebox[" & decimal(largeurB) & "pt]{\bfseries " & str $ & "}") );
+    	boxit.$(textext("\makebox[" & decimal(largeurB) & "pt]{\bfseries " & str $ & "}"));
 	if (encadreBJ=1) :
 	  fill bpath.$ withcolor couleurBJ;
 	fi;
@@ -179,11 +165,12 @@ vardef montreHoraires (text t) :=
 	  exitif $ = "";
 	  if ((j mod 2) = 0) :
 		if ($ <> "rien") :
-		  label.ulft(TEX(taillePoliceHoraire & " " & $),Lundi[i].sw);
+		  label.ulft(textext(taillePoliceHoraire & " " & $),Lundi[i].sw);
 		fi;
 		i:=i+1;
 	  elseif ($ <> "rien") :
-		label.llft(TEX(taillePoliceHoraire & " " & $),Lundi[i].nw);
+	    label.llft(textext(taillePoliceHoraire & " " & $),Lundi[i].nw);
+	    label.llft(textext(taillePoliceHoraire & " " & $),Lundi[i].nw);
 	  fi;
 	  j:=j+1;
 	endfor;
@@ -221,7 +208,7 @@ vardef defCours (text type)(text t)(expr c,duree)(expr intituleClasse)(text inti
 %% contenu du label
 	s="\begin{tabular}{c}" & classe & "\\\mbox{}\hfill\small\textit{"
 	& intituleSalle & "}\end{tabular}";
-	texte=TEX(s);
+    	texte=textext(s);
 %% tracé de l'image
 	imageCreneau[numeroImage]:=image(
 	  if (arrondiB=1) :
@@ -246,7 +233,7 @@ vardef defCours (text type)(text t)(expr c,duree)(expr intituleClasse)(text inti
 %% contenu du label
 	s="\begin{tabular}{l}" & classe & "\\\small\textit{"
 	& intituleSalle & "}\end{tabular}";
-	texte=TEX(s);
+    	texte=textext(s);
 %% tracé de l'image
 	imageCreneau[numeroImage]:=image(
 	  if (arrondiB=1) :
@@ -271,7 +258,7 @@ vardef defCours (text type)(text t)(expr c,duree)(expr intituleClasse)(text inti
 %% contenu du label
 	s="\begin{tabular}{r}" & classe & "\\\small\textit{"
 	& intituleSalle & "}\end{tabular}";
-	texte=TEX(s);
+        texte=textext(s);
 %% mise en forme
 	imageCreneau[numeroImage]:=image(
 	  if (arrondiB=1) :
